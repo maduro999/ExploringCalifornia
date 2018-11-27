@@ -35,7 +35,7 @@ namespace ExploreCalifornia
                 //else, it process the next function Hello world!!!
                 if (context.Request.Path.Value.StartsWith("/hello"))
                 {
-                    await context.Response.WriteAsync("Hello World2");
+                    await context.Response.WriteAsync("Hello World123");
                 }
                 await next();
             });
