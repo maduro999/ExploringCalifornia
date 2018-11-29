@@ -25,9 +25,16 @@ namespace ExploreCalifornia
         {
             loggerFactory.AddConsole();
 
-            //to use the configuration api - an instance of the configuration builder object must be created and import
+            //to use the configuration api using environment variables - an instance of the 
+            //configuration builder object must be created and import
             //its namespace 'using Microsoft.Extensions.Configuration;'
             var configuration = new ConfigurationBuilder()
+                                    //another configuration source, using json files. Add a json call in the configuration builder 
+                                    //with the path the the json config file, which needs to be created in the root of the project.
+                                    .AddJsonFile(env.ContentRootPath + "/config.json")
+                                    .AddJsonFile(env.ContentRootPath + "/config.dev.json", true)//the true flag tells the 
+                                    //config api that if a file does not exist then keep on going with the existing config file.
+                                    //true is an optional switch
                                     .AddEnvironmentVariables()
                                     .Build();
 
@@ -37,15 +44,25 @@ namespace ExploreCalifornia
             //to view this error page change the environment in the projects properties from dev to prod
             app.UseExceptionHandler("/error.html");
 
-            if (configuration["EnableDevMode"]=="false") //this env dev variable was set in the project configurations with a true value
-                //now when I set this to true it will show the dev error page, if I set the env variable to false it will display the error html page
-                //basically setting this to false will skip the registration of the developer exception page 'UseDeveloperExceptionPage'
+            if (configuration.GetValue<bool>("FeaturesToggle:EnableDevExceptions"))//this is looking at the json file 
             {
-                //if the environment is dev then display a more detailed error page - for devs only.
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Use(async (context, next) => {
+
+                /*
+
+                if (configuration["EnableDevMode"]=="false") //this env dev variable was set in the project configurations with a true value
+                    //now when I set this to true it will show the dev error page, if I set the env variable to false it will display the error html page
+                    //basically setting this to false will skip the registration of the developer exception page 'UseDeveloperExceptionPage'
+                {
+                    //if the environment is dev then display a more detailed error page - for devs only.
+                    app.UseDeveloperExceptionPage();
+                }
+
+                */
+
+                app.Use(async (context, next) => {
 
                 if (context.Request.Path.Value.Contains("invalid"))
                 {
