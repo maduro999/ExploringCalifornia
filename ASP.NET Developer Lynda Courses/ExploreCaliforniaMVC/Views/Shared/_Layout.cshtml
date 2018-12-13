@@ -1,0 +1,164 @@
+﻿<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Welcome to Explore California</title>
+<meta name="description" content="A lynda.com example of HTML5 and CSS3">
+<meta name="keywords" content="html5, css3, lynda, local storage, canvas, forms, semantics, web apps">
+<!--make sure mobile devices display the page at the proper scale	-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="/css/main.css" rel="stylesheet" type="text/css" media="screen, projection">
+</head>
+<body id="home" class="no-js">
+<div id="wrapper">
+  <header id="mainHeader"> <a href="/" title="home" class="logo">
+   <!-- I need this div because IE is an affront to mankind-->
+	<div>
+	<h1>Explore California</h1>
+	</div>
+	</a>
+	<nav id="siteNav">
+	  <h1>Where do you want to go?</h1>
+	  <ul>
+	   <li><a href="/tours.htm" title="Our tours">Tours <br /><span class="tagline">follow our bliss</span></a>
+		  <ul>
+			<li><a href="/tours.htm" title="Our tours">All Tours</a></li>
+			<li><a href="/tours.htm" title="find tours">Tours by Activity</a></li>
+			<li><a href="/tours.htm" title="find tours">Tours by Region</a></li>
+			<li><a href="/tours.htm" title="find tours">Tour Finder</a></li>
+		  </ul>
+		</li>
+		<li><a href="mission.htm" title="What we believe">Mission <br /><span class="tagline">what makes us different?</span></a></li>
+		<li><a href="resources.htm" title="planning resources">Resources <br /><span class="tagline">plan your trip</span></a>
+		  <ul>
+			<li><a href="resources/faq.htm" title="Got questions?">Tour FAQs</a></li>
+			<li><a href="resources/additional_resources.htm" title="additional resources">Tour Information</a></li>
+			<li><a href="resources/terms.htm" title="terms and conditions">Site Terms</a></li>
+		  </ul>
+		</li>
+		<li><a href="explorers.htm" title="Our community">Explorers <br /><span class="tagline">join our community</span></a>
+            <ul>
+                <li><a href="explorers/join.htm" title="join our community">Join the Explorers</a></li>
+                <!--In order to have this link sync with the route, you can use an html helper.HTML action link-->
+                <!--<li><a href="/blog" title="read our blog!">Read our Blog</a></li>-->
+                <!--This version of the action link takes 3 params, the first param is the text of the link itself.
+                    The second if the name of the Action I want to link to, the third is the name of the controller
+                    that the action lives in. The other 2 params are - title if the tooltip on hover-->
+                <!--Notw: HTML ActionLink generates anchor tags, based on a controller and an action name.-->
+                @*<li>@Html.ActionLink("Read this blog", "Index", "Blog", null, new { title = "read our blog" })</li>*@
+                
+                <!--A URL html helper can also be used-->
+                <!--Unlike the html.ActionLink, the Url helper renders only the value of the url and not other html in its parameters-->
+                <li><a href="@Url.Action("Index", "Blog")" title="read our blog">Read our Blog!!</a></li>
+
+                <li><a href="explorers/gallery.htm" title="contributor photos">Tour Photos</a></li>
+                <li><a href="_video/EC_podcast_full version.mov" title="check out our podcast">Video podcast</a></li>
+            </ul>
+		</li>
+		<li><a href="contact.htm" title="contact us" class="last">Contact <br /><span class="tagline">we're listening</span></a>
+		  <ul>
+			<li><a href="support.htm" title="need help?">Support</a></li>
+		  </ul>
+		</li>
+	  </ul>
+	</nav>
+  </header>
+  <section id="actionCall">
+      <!--MVC forces views that use this layout to implement the RenderSection, unless you set a false flag in the method call RenderSection("header", false) -->
+         @*@RenderSection("header")*@
+      <!--Another way to handle this is to set default content in the layout, for example.-->
+      @if(IsSectionDefined("header")){ 
+        @RenderSection("header", false)
+      }else{
+        <h1>Exploing California 2018</h1>
+      }
+      <!--If section is defined in the layout, render section, else render some placeholder text.-->
+  </section>
+  <div id="contentWrapper">
+      <section id="mainContent">
+          @RenderBody()
+      </section>
+
+      <aside id="secondaryContent">
+          @if (IsSectionDefined("secondaryContent"))
+          {
+              @RenderSection("secondaryContent", false)
+          }
+          else
+          {
+
+              <div id="specials" class="callOut">
+                  @*just use the component.invoke helper method in the view that you wish to render the view component in.
+                    And since this is an Async method that we're calling from a view, I'll have to put the await keyword in front of it in order for it to work.*@
+                  @*@await Component.InvokeAsync("MonthlySpecials")*@
+
+
+                  @*As an alternative, I can also use the generic version of the InvokeAsync method to make a strongly typed reference to the view component.
+                    Notice how I've wrapped the call in parenthesis, so Razor doesn't confuse the generic parameter within HTML tag.*@
+                  @await (Component.InvokeAsync<ExploreCaliforniaMVC.ViewComponents.MonthlySpecialsViewComponent>())
+
+              </div>
+              <div id="trivia" class="callOut">
+                  <h1>Did You Know?</h1>
+                  <p>California produces over 17 million gallons of wine each year!</p>
+              </div>
+
+          }
+      </aside>
+      @* This has been moved to it to above, where if the view has the secondayContent defined, then display blank section of view
+        <aside id="secondaryContent">
+            <div id="specials" class="callOut">
+                just use the component.invoke helper method in the view that you wish to render the view component in.
+                  And since this is an Async method that we're calling from a view, I'll have to put the await keyword in front of it in order for it to work.
+                @await Component.InvokeAsync("MonthlySpecials")
+
+
+                As an alternative, I can also use the generic version of the InvokeAsync method to make a strongly typed reference to the view component.
+                  Notice how I've wrapped the call in parenthesis, so Razor doesn't confuse the generic parameter within HTML tag.
+                @await (Component.InvokeAsync<ExploreCaliforniaMVC.ViewComponents.MonthlySpecialsViewComponent>())
+
+            </div>
+            <div id="trivia" class="callOut">
+                <h1>Did You Know?</h1>
+                <p>California produces over 17 million gallons of wine each year!</p>
+            </div>
+        </aside>
+      *@
+  </div>
+  <footer id="pageFooter">
+  <section id="quickLinks">
+  <h1>Quick Nav</h1>
+	<ul id="quickNav">
+	  <li><a href="/" title="Our home page">Home</a></li>
+	  <li><a href="/tours.htm" title="Explore our tours">Tours</a></li>
+	  <li><a href="mission.htm" title="What we think">Mission</a></li>
+	  <li><a href="resources.htm" title="Guidance and planning">Resources</a></li>
+	  <li><a href="explorers.htm" title="Join our community">Explorers</a></li>
+	  <li><a href="contact.htm" title="Contact and support">Contact</a></li>
+	</ul>
+  </section>
+  <section id="footerResources">
+  <h1>Resources</h1>
+	<ul id="quickNav">
+	  <li><a href="resources/faq.htm" title="Our home page">FAQ</a></li>
+	  <li><a href="support.htm" title="Need help?">Support</a></li>
+	  <li><a href="resources/legal.htm" title="The fine print">Legal</a></li><li><a href="login.htm">Login</a></li>
+	</ul>
+	  <p>
+		  Copyright RM @DateTime.Now.Year
+	  </p>
+  </section>
+  <section id="companyInfo">
+  <h1>Contact</h1>
+  <h2>Explore California</h2>
+	  <p>5605 Nota Street<br />
+		Ventura, CA 93003</p>
+	  <p>866.555.4310<br />866.555.4315 <em>(24 hour support)</em></p>
+  </section>
+  </footer>
+</div>
+</body>
+</html>

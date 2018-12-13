@@ -1,0 +1,37 @@
+﻿@*Tell razor that the typs of the model is the Post type*@
+@model ExploreCaliforniaMVCWithData.Models.Post
+@*Replace the references to ViewBag with references to the stringly types model, which is accessed through the Model property*@
+
+
+
+@{
+    //Layout = "_Layout";
+    Layout = "_SimpleLayout"; /*_SimpleLayout uses the _Layout as it's base layout except it defines how secondaryContent is handeled. When using this _SimpleLayout
+    the _Layout will be rendered except for the SecondaryContent. It's a View in a View. Basically, any View that uses the _SimpleLauout will not display the MonthlySpecials, which is the 
+    SecondaryContent on the left side. In other words, this View was specifically created to display the page exactly like the Index view, except for this blanking out the SecondaryContent.*/
+}
+
+@Html.Partial("_Post");  @*Coming from the shared filder*@
+
+@*<article class="blog-post">
+    <h1>@Model.Title</h1>
+    <div class="details">
+        Posted <span>@Model.Posted</span> By <span>@Model.Authors</span>
+    </div>
+    <div class="content">
+        @Model.Body
+    </div>
+</article>*@
+
+@*@{
+        Layout = "_Layout";
+    }
+    <article class="blog-post">
+        <h1>@ViewBag.Title</h1>
+        <div class="details">
+            Posted <span>@ViewBag.Posted</span> By <span>@ViewBag.Author</span> Initials <span>@ViewBag.Initials</span>
+        </div>
+        <div class="content">
+            @ViewBag.Body
+        </div>
+    </article>*@

@@ -1,0 +1,23 @@
+﻿@*Register the FormattingService class as a property in the view using the inject keyword, which takes two params. 
+    1. is the type that should be injected 
+    2. Is the name of the property we want MVC to create for us dynamically*@
+@inject ExploreCaliforniaMVC.Models.FormattingService Format
+
+@model ExploreCaliforniaMVC.Models.Post
+
+<article class="blog-post">
+    <h1>@Model.Title</h1>
+    <div class="details">
+        @*Injectable services technique*@
+        @*Then refer to the Format property which exposes the methods in the FormattingService class, to get the date format *@
+        @*Before you use this type - or any type that leverages ASP.net Cores built in dependency injection framework
+            It must be registered, in the Startup class - ConfigureServices method.*@
+        Posted <span>@Format.AsReadableDate(Model.Posted)</span> By <span>@Model.Authors</span>
+    </div>
+    <div class="content">
+        @Model.Body
+    </div>
+</article>
+
+
+@*this partial is being calle din the index and the post views*@
