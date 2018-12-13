@@ -1,0 +1,34 @@
+﻿@model ExploreCaliforniaMVCWithData.Models.Post
+@*strongly typed view, by specifying the @model tag at the top of the 
+file, and entering the full class name of the post type*@
+@{ 
+    Layout = "_Layout";
+}
+<h1>Create a Blog Post</h1>
+<fieldset>
+    @*HTML Helper to render the html. An dsince this html help returns a disposable object
+        it needs to be wrapped in a Using statement. When MVC renders the page, everyting inside the
+        using block will be wrapped inside thr form tag.*@
+
+    @using (Html.BeginForm())
+    {
+    <p>
+        @* EditorFor - This particular helper is smart enough to look at the property you'd like to generate an input
+        field for, and figure out the best HTML to render for it. For example, it'll render a
+        password input for password fields, and it'll render a text area field for large text
+        fields, et cetera*@
+        @Html.LabelFor(x => x.Title)
+        @Html.EditorFor(x => x.Title)
+    </p>
+
+        <p>
+            @*lambda expression to select to select the property I want to render the input
+                field for. At run time, MVC will automatically resolve this lambda expression to
+                the name of that property, and use that property name as the ID of this input field.*@
+            @Html.LabelFor(x => x.Body)
+            @Html.TextAreaFor(x => x.Body)
+        </p>
+
+        <button type="submit">Create Post</button>
+    }
+</fieldset>

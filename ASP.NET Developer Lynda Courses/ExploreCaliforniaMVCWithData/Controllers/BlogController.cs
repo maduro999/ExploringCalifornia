@@ -12,12 +12,6 @@ namespace ExploreCaliforniaMVCWithData.Controllers
     [Route("blog")] //route attribs can also be applied to the controller itself and all the actions will inherit this
     public class BlogController : Controller
     {
-        [Route("create")]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         [Route("")]
         public IActionResult Index()
         {
@@ -90,5 +84,14 @@ namespace ExploreCaliforniaMVCWithData.Controllers
         //{
         //    return new ContentResult { Content = id.ToString()};
         //}
+
+
+        [Route("create")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+
     }
 }
