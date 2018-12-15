@@ -1,34 +1,86 @@
-﻿@model ExploreCaliforniaMVCWithData.Models.Post
-@*strongly typed view, by specifying the @model tag at the top of the 
-file, and entering the full class name of the post type*@
-@{ 
+﻿@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@*The asterisx above means to add all the tag helpers in the Microsoft.AspCore.MVC.TagHelpers package*@
+@model ExploreCaliforniaMVCWithData.Models.Post
+@*strongly typed view, by specifying the @model tag at the top of the
+    file, and entering the full class name of the post type*@
+@{
     Layout = "_Layout";
 }
 <h1>Create a Blog Post</h1>
 <fieldset>
-    @*HTML Helper to render the html. An dsince this html help returns a disposable object
-        it needs to be wrapped in a Using statement. When MVC renders the page, everyting inside the
-        using block will be wrapped inside thr form tag.*@
+    @*Apply the asp-action attribute to the form tag and assigning it the value of the create action
+        that I want to post the form back to. Likewise, I can specify the controller with the asp-controller attribute.
+        If you insoect this code in the browser you will notice you don't see the asp-action or asp-controller attributes
+        that were specified. Instead you see a regular action attribute populated with the URL of the create controller action. 'form action="/blog/create" method="post"'
+        This is because the asp-action and asp-controller attributes are two of the many tag helper attributes that Razor is going to look for when it renders the view.
+        When it finds these or any other tag helper attributes, Razor hands the element over to that tag helper so that it can modify the markup however it sees fit.
+        In this case, the form tag helper removes those ASP attributes and replaces them with an action attribute containing the URL of the controller action and a method
+        attribute containing the method that I'm using to post back to the server. *@
+    <form asp-action="Create" asp-controller="Blog">
 
-    @using (Html.BeginForm())
-    {
-    <p>
-        @* EditorFor - This particular helper is smart enough to look at the property you'd like to generate an input
-        field for, and figure out the best HTML to render for it. For example, it'll render a
-        password input for password fields, and it'll render a text area field for large text
-        fields, et cetera*@
-        @Html.LabelFor(x => x.Title)
-        @Html.EditorFor(x => x.Title)
-    </p>
+        @*asp-validation-summary tag helper. Notice that this tag helper requires a property, an enum value which
+            describes which validation errors to include in the summary.This value can either be All to display all errors,
+            ModelOnly to display only high-level errors that are not specific to any property, or None to
+            suppress all errors and not show any validation messages at all.*@
+        <div asp-validation-summary="ModelOnly" class="input-validation-error">
+            <p>
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-sontrol" placeholder="Title" />
+                <span asp-validation-for="Title"></span>
+            </p>
 
-        <p>
-            @*lambda expression to select to select the property I want to render the input
-                field for. At run time, MVC will automatically resolve this lambda expression to
-                the name of that property, and use that property name as the ID of this input field.*@
-            @Html.LabelFor(x => x.Body)
-            @Html.TextAreaFor(x => x.Body)
-        </p>
+            <p>
+                <label asp-for="Body"></label>
+                <textarea asp-for="Body" class="form-sontrol" placeholder="Blog Body"></textarea>
+                <span asp-validation-for="Body"></span>
+            </p>
 
-        <button type="submit">Create Post</button>
-    }
+            <p>
+                <button type="submit">Create Post</button>
+            </p>
+
+        </div>
+    </form>
+
+
+    @* You may find tag helpers to be a good compromise between full control over your HTML markup and the ability to have 
+        ASP Core MVC generate some of that markup for you or you may not like this style at all and prefer to stick with 
+        just HTML helpers or you may choose to use a combination of the two. Either way, just keep in mind that you have 
+        both of these approaches at your disposal. So you can use either one depending on your situation. *@
+
+
+
+    @*
+        HTML Helper to render the html. An dsince this html help returns a disposable object
+            it needs to be wrapped in a Using statement. When MVC renders the page, everyting inside the
+            using block will be wrapped inside thr form tag.
+
+        @using (Html.BeginForm())
+        {
+            //this summary displays all the validations errors in one place
+            @Html.ValidationSummary();
+
+            <p>
+                EditorFor - This particular helper is smart enough to look at the property you'd like to generate an input
+                    field for, and figure out the best HTML to render for it. For example, it'll render a
+                    password input for password fields, and it'll render a text area field for large text
+                    fields, et cetera
+                @Html.LabelFor(x => x.Title)
+                @Html.EditorFor(x => x.Title)
+                @Html.ValidationMessageFor(x => x.Title)
+            </p>
+
+            <p>
+                lambda expression to select to select the property I want to render the input
+                    field for. At run time, MVC will automatically resolve this lambda expression to
+                    the name of that property, and use that property name as the ID of this input field.
+                @Html.LabelFor(x => x.Body)
+                @Html.EditorFor(x => x.Body)
+                @Html.ValidationMessageFor(x => x.Body)
+            </p>
+
+            <button type="submit">Create Post</button>
+        }
+    *@
+
 </fieldset>

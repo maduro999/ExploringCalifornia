@@ -6,7 +6,11 @@
 @model ExploreCaliforniaMVCWithData.Models.Post
 
 <article class="blog-post">
-    <h1>@Model.Title</h1>
+    @* Remember back when I first introduced the ActionLink Helper and mentioned that this last property allows you to pass RouteData? 
+        Well, the Post action requires three parameters, year, month, and key, so in order to call this action from the ActionLink Helper, 
+        I simply define the names of these parameters as properties on an anonymously typed object like this. Before I run this, 
+        I'll first update this Post action in the BlogController to read the individual Post from the data context as well so that I can show the full end-to-end workflow. *@
+    <h1>@Html.ActionLink(Model.Title, "Post", "Blog", new { year = Model.Posted.Year, month = Model.Posted.Month, key = Model.Key })</h1>
     <div class="details">
         @*Injectable services technique*@
         @*Then refer to the Format property which exposes the methods in the FormattingService class, to get the date format *@

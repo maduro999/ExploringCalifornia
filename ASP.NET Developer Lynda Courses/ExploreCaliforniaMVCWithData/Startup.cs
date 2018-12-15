@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace ExploreCaliforniaMVCWithData
@@ -39,6 +40,29 @@ namespace ExploreCaliforniaMVCWithData
                 EnableDeveloperExceptions = configuration.GetValue<bool>("FeatureToggles:EnableDeveloperExceptions")
 
             });
+
+            //-----------------------------------------------------------------------------------------------------------------------------------------------
+            /* This registration is going to be a bit different than the ones that I've done before. Rather than use the add transient or add scope methods 
+             * Entity Framework offers its own method called add db context of type t. This helper method configures everything needed to inject 
+             * Entity Framework data context and it accepts this function that allows us to define various options for that data context. 
+             * Next, I'll need to tell Entity Framework what kind of database I'm connecting to and I'll do this with the use sequel server method 
+             * to say that I will be interacting with a Microsoft sequel server database. Support for connecting to Microsoft sequel server database 
+             * lives in its own package so I'll need to add a reference to that package for this to work. This method also requires a connection string 
+             * that tells Entity Framework how to connect to the target database and to get this connection string, I'll call a method on the configuration object 
+             * called get connection string and I'll pass it, the name of the connection string that I'd like to get. The get connection string method is just a 
+             * simple way to read the connection string section of the configuration settings.Config json file
+             * These configuration lines build up a Db context options object which Entity Framework needs to be able to give to our data context.
+             * To do this, I'll add a constructor in th BlogDataContext class that accepts a Db context options object and just passes it to the Db context base class like this.
+             */
+            services.AddDbContext<BlogDataContext>(options =>
+            {
+                var connectionString = configuration.GetConnectionString("BlogDataContext");
+                options.UseSqlServer(connectionString);
+            });
+            /*Now that we've created and configured our new data context class, all that's left is to simply inject it into our controllers.
+             So, let's open up our blog controller again and start by injecting a instance of the blog data context class into the constructor.
+             */
+            //-----------------------------------------------------------------------------------------------------------------------------------------------
 
             //configure AddMVC service - middleware needs this service in order to work
             services.AddMvc();

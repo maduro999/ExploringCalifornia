@@ -1,6 +1,11 @@
 {
-    "FeatureToggles": {
-        "EnableDeveloperExceptions": true
-    }
+  "ConnectionStrings": {
+    "BlogDataContext": "Server=(localdb)\\mssqllocaldb;Database=ExploreCaliforniaMVCWithData;Trusted_Connection=True;"
+  },
+  "FeatureToggles": {
+    "EnableDeveloperExceptions": true
+  }
 
 }
+
+//The connection string shown here will connect to the Explore California database on the local sequel server express instance that is installed along with Visual Studio
