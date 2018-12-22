@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "_Layout";
+    //Layout = "_SimpleLayout";
+    /*_SimpleLayout uses the _Layout as it's base layout except it defines how secondaryContent is handeled. When using this _SimpleLayout
+    the _Layout will be rendered except for the SecondaryContent. It's a View in a View. Basically, any View that uses the _SimpleLauout will not display the MonthlySpecials, which is the
+    SecondaryContent on the left side. In other words, this View was specifically created to display the page exactly like the Index view, except for this blanking out the SecondaryContent.*/
+}
+
+@*To fix the issue where the index page was refreshing and setting the layout everytime, the lauout code can be set in a special view
+    called the view start view. The view start view is a view that gets run before every single other view in this site which makes
+    it a great place to put any common logic such as setting the layout property for every page in the site. To implement the
+    view start view, simply add a new file to your views folder named _viewstart.cshtml Note that the name of this file, including
+    the underscore, really does matter this time. So just be sure that that's correct. Once you have this file, you can simply
+    cut and paste the layout property line from the index page and into this page. From this point on, the layout property
+    will be set on every single view without each view having to explicitly set it itself.*@
+
+
+
+@*Let's move on to updating the blog controller action to look for AJAX requests*@

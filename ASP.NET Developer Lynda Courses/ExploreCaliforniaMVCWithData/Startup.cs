@@ -32,7 +32,13 @@ namespace ExploreCaliforniaMVCWithData
         public void ConfigureServices(IServiceCollection services)
         {
             //Injectable services techniques
-            services.AddTransient<SpecialsDataContext>();
+            //services.AddTransient<SpecialsDataContext>();
+            services.AddDbContext<SpecialsDataContext>(options =>
+            {
+                var connectionString = configuration.GetConnectionString("SpecialsDataContext");
+                options.UseSqlServer(connectionString);
+            });
+
             services.AddTransient<FormattingService>();
 
             services.AddTransient<FeatureToggles>(x => new FeatureToggles
@@ -59,6 +65,8 @@ namespace ExploreCaliforniaMVCWithData
                 var connectionString = configuration.GetConnectionString("BlogDataContext");
                 options.UseSqlServer(connectionString);
             });
+
+           
             /*Now that we've created and configured our new data context class, all that's left is to simply inject it into our controllers.
              So, let's open up our blog controller again and start by injecting a instance of the blog data context class into the constructor.
              */

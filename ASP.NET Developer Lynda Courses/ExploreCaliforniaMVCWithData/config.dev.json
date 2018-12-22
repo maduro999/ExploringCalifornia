@@ -1,6 +1,7 @@
 {
   "ConnectionStrings": {
-    "BlogDataContext": "Server=(localdb)\\mssqllocaldb;Database=ExploreCaliforniaMVCWithData;Trusted_Connection=True;"
+    "BlogDataContext": "Server=(localdb)\\mssqllocaldb;Database=ExploreCaliforniaMVCWithData;Trusted_Connection=True;",
+    "SpecialsDataContext": "Server=(localdb)\\mssqllocaldb;Database=ExploreCaliforniaMVCWithData_Special;Trusted_Connection=True;"
   },
   "FeatureToggles": {
     "EnableDeveloperExceptions": true

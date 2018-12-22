@@ -1,20 +1,39 @@
 ﻿@*Tell razor to expect the model to be a collection of Post objects. Then use the for each loop to iterate of the collection*@
-@model  IEnumerable<ExploreCaliforniaMVCWithData.Models.Post>
-@{
-    //Layout = "_Layout";
-    Layout = "_SimpleLayout"; /*_SimpleLayout uses the _Layout as it's base layout except it defines how secondaryContent is handeled. When using this _SimpleLayout
-    the _Layout will be rendered except for the SecondaryContent. It's a View in a View. Basically, any View that uses the _SimpleLauout will not display the MonthlySpecials, which is the 
+@model IEnumerable<ExploreCaliforniaMVCWithData.Models.Post>
+
+@*@{ this was moved to the _ViewStart view
+    Layout = "_Layout";
+    //Layout = "_SimpleLayout";
+    /*_SimpleLayout uses the _Layout as it's base layout except it defines how secondaryContent is handeled. When using this _SimpleLayout
+    the _Layout will be rendered except for the SecondaryContent. It's a View in a View. Basically, any View that uses the _SimpleLauout will not display the MonthlySpecials, which is the
     SecondaryContent on the left side. In other words, this View was specifically created to display the page exactly like the Index view, except for this blanking out the SecondaryContent.*/
-}
-<h1>My Blog</h1>
+}*@
+<h1>Explorer's Blog</h1>
 <p>
-    Test paragraph
+    Below are a few of the latests posts.
 </p>
+@* Added for partial rendering module *@
+<p class="pager">
+    @if (ViewBag.HasPreviousPage)
+    {
+        <a class="prev" href="@Url.Action("Index", "Blog", new { page = ViewBag.PreviousPage })">
+            &lt; Previous
+        </a>
+    }
+
+    @if (ViewBag.HasNextPage)
+    {
+        <a class="next" href="@Url.Action("Index", "Blog", new { page = ViewBag.NextPage })">
+            Next &gt;
+        </a>
+    }
+</p>
+@* Added for partial rendering module above  *@
 <div class="blog-posts">
     @foreach (var post in Model)
     {
         @*Coming from the shared filder*@
         @Html.Partial("_Post", post); //overload the Html.Partial helper so that it accepts a second param, which allows the passing in of any object
-        //that you want to use as the model
+          //that you want to use as the model
     }
 </div>
