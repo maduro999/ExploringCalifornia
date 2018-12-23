@@ -30,8 +30,15 @@ namespace ExploreCaliforniaMVCWithData.Models
          * 
          * */
 
-        public DbSet<Post> Posts { get; set; }
+        //*******************************************************************************
+        /*add a new DB set property named Comments. Now I can begin using this updated 
+         * data context to implement the Comments Controller. Next, inject the 
+         * BlogDataContext class into the Constructor of the Controller (CommentsController)
+         */
+        public DbSet<Comment> Comments { get; set; }
+        //*******************************************************************************
 
+        public DbSet<Post> Posts { get; set; }
 
         //add a constructor that accepts a Db context options object and just passes it to the Db context base class like this.
         public BlogDataContext(DbContextOptions<BlogDataContext> options) : base(options)
@@ -43,7 +50,7 @@ namespace ExploreCaliforniaMVCWithData.Models
              * generate the sequel schema required to create the database and then go ahead and execute that generated sequel 
              * to actually create that brand new database for us.
              */
-            Database.EnsureCreated();
+        Database.EnsureCreated();
 
         }
     }
