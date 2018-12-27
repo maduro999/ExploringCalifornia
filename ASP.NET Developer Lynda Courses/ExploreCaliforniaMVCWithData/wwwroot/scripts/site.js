@@ -61,6 +61,13 @@ function Post(el) {
 
 
     // RESTful Web API URL:  /api/posts/{postKey}/comments
+
+    /* There are two important things to notice about these calls. The first is how I'm using the same exact URL to implement two different operations. 
+     * Getting the comments and adding a new comment. The only different between these two calls is the http verb that is used. Get to retrieve 
+     * comments, and post to add a comment. The second part to notice is how I'm converting the object that I want to send into json first, and 
+     * then using the content type parameter to tell jquery to set the content type header of the request to application slash json. 
+     * This tells the web API what kind of content I'm sending so that it will know to deserialize it as json rather than the xml or a 
+     * set of form post values.*/
     var webApiUrl = ['/api/posts', postKey, 'comments'].join('/');
 
     function addComment() {

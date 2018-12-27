@@ -6,9 +6,9 @@
 @model ExploreCaliforniaMVCWithData.Models.Post
 
 <article class="blog-post">
-    @* Remember back when I first introduced the ActionLink Helper and mentioned that this last property allows you to pass RouteData? 
-        Well, the Post action requires three parameters, year, month, and key, so in order to call this action from the ActionLink Helper, 
-        I simply define the names of these parameters as properties on an anonymously typed object like this. Before I run this, 
+    @* Remember back when I first introduced the ActionLink Helper and mentioned that this last property allows you to pass RouteData?
+        Well, the Post action requires three parameters, year, month, and key, so in order to call this action from the ActionLink Helper,
+        I simply define the names of these parameters as properties on an anonymously typed object like this. Before I run this,
         I'll first update this Post action in the BlogController to read the individual Post from the data context as well so that I can show the full end-to-end workflow. *@
     <h1>@Html.ActionLink(Model.Title, "Post", "Blog", new { year = Model.Posted.Year, month = Model.Posted.Month, key = Model.Key })</h1>
     <div class="details">
@@ -21,6 +21,32 @@
     <div class="content">
         @Model.Body
     </div>
+
+    @*-------------------------------------------------------------------------------------------------------------------------------*@
+    @*The most important thing to notice about this html below is that it doesn't actually do anything when the page loads up.
+        It merely acts as the place holder for the comments when or if they're ever loaded. This approach helps to speed up
+        the initial page load since we don't have to wait on the server to retrieve the comments nor
+        do we have to wait for the browser to render them.*@
+    <a href="#" class="show-comments">Show Comments</a>
+    <div class="comments-container hide" data-post-key="@Model.Key">
+        <h3>Comments</h3>
+        <div class="comments">
+        </div>
+        <hr />
+        <div>
+            <a href="#" class="add-comment">Add a comments</a>
+            <div class="new-comment hide">
+                <form role="form">
+                    <div class="form-group">
+                        <textarea name="Body" class="new-comment form-control" placeholder="Enter comment here..."></textarea>
+                        <button type="submit" class="btn btn-default">Create Comment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @*-------------------------------------------------------------------------------------------------------------------------------*@
+
 </article>
 
 

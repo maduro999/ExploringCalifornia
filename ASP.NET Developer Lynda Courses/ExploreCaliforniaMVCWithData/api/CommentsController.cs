@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 using ExploreCaliforniaMVCWithData.Models;
 using Microsoft.AspNetCore.Mvc;
 
+/* CHALLENGE***************************
+ * I only implemented two of the HTTP verbs that were in the code that Visual Studio generated for me, GET and POST. 
+ * Your challenge is to go back and finish what I started, implementing all of the GET, PUT, POST and DELETE 
+ * methods that I didn't get around to implementing*/
+
 /*
 A Web API is a server-side web service that exposes a lightweight interface and data structures with an emphasis 
 on usability and the ability to be consumed by HTTP base devices such as browsers. When it comes down to it, a Web API 
@@ -15,7 +20,7 @@ entity.PUTs indicate a request to update an existing entity. POSTs indicate a re
 DELETEs indicate a request to remove or delete an entity from the system. In ASP.NET Core MVC, Web API endpoints 
 are nothing but controller actions.
 */
-
+// API call example - for thie particular post "testing-post-4 and comment Id 4"http://localhost:58135/api/posts/testing-post-4/comments/4
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ExploreCaliforniaMVCWithData.api
@@ -49,12 +54,27 @@ namespace ExploreCaliforniaMVCWithData.api
             //return new string[] { "value1", "value2" };
             return _db.Comments.Where(x => x.Post.Key == postKey);
         }
-        // GET api/<controller>/5
+
+        /*Challenge Solution*********************/
+            // GET api/<controller>/5
+            //[HttpGet("{id}")]
+            //public string Get(int id)
+            //{
+            //    return "value";
+            //}
+        // GET api/values/5
+        /*First, I took the get API that allows consumers to retrieve a single comment by its ID. The first thing 
+         * I did was to change the return type of the action because the action should return a comment, not a string. 
+         * Then I changed the int parameter to a long, to match the type of the ID property on the comment class. 
+         * And finally, the good stuff. I found the comment that matches this ID in the comments collection.*/
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Comment Get(long id)
         {
-            return "value";
+
+            var comment = _db.Comments.FirstOrDefault(x => x.Id == id);
+            return comment;
         }
+        /***************************************/
 
         // POST api/<controller>
         [HttpPost]
@@ -84,16 +104,71 @@ namespace ExploreCaliforniaMVCWithData.api
             return comment;
         }
 
-        // PUT api/<controller>/5
+        /*Challenge Solution*********************/
+            // PUT api/<controller>/5
+            //[HttpPut("{id}")]
+            //public void Put(int id, [FromBody]string value)
+            //{
+            //}
+        /*The important thing here is really just remembering that in a web API, the put verb means that you want to update an existing entity. 
+         *I'll modify the signature to take in the ID of the comment that should be updated, as well as a comment object to accept the updated 
+         *comment data. Then, once again, I'll find the existing comment by its ID and, if I don't find it, I'll return an action result, indicating 
+         *that it wasn't found. Of course, when I do this I need to update the signature from void to IActionResult. When it is found, however, 
+         *I'll just copy the values over. 
+         *Since this is a simple object, the only thing that I want the user to be able to update is the body property. And once I've updated 
+         *everything, I can save that updated comment and respond to the request that everything was okay.*/
+        // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Put(long id, [FromBody]Comment updated)
         {
+            var comment = _db.Comments.FirstOrDefault(x => x.Id == id);
+
+            if (comment == null)
+                return NotFound();
+
+            comment.Body = updated.Body;
+
+            _db.SaveChanges();
+
+            return Ok();
+        }
+        /* to put (update comment) for example you have to include the body of the comment
+         * { //this is the api call http://localhost:58135/api/posts/testing-post-4/comments/4
+                "id": 4, <---- this is the comment Id (when calling the api it already contains this key so it can be omitted here) 
+                "postId": 5, <---- the post id that the comment is related to (can also be omitted because the postId is related to the PostKey which is the post name in the api call (testing-post-4) in this case.
+                "post": null,
+                "posted": "2018-12-26T23:40:38.8879755", <---- date time posted
+                "author": null,
+                "body": "testing 123456789" <--- the updated body of the comment
+            }
+         */
+        /***************************************/
+
+
+
+        /*Challenge Solution*********************/
+        //// DELETE api/<controller>/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
+        /*While I will leave the return type as void, I'll change the int parameter to a long parameter to match the comment class again. 
+         * Then I'll use the same code as before to locate the comment by its ID. If I find the comment, I'll remove it from the database 
+         * by simply removing it from the collection. And don't forget to run save changes when you're done.*/
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public void Delete(long id)
+        {
+            var comment = _db.Comments.FirstOrDefault(x => x.Id == id);
+
+            if (comment != null)
+            {
+                _db.Comments.Remove(comment);
+                _db.SaveChanges();
+            }
         }
 
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        /***************************************/
+
     }
 }
